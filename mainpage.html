@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" />
+<title>SafePass</title>
+<script>
+function randomPassword() {
+var i;
+var s = "";
+const alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`~!@#$%^&*()-_=+[{]}\|;:";
+for (i = 0; i < 15; i++) {
+s += alphabet[Math.floor(Math.random() * alphabet.length)]
+}
+  document.getElementById("randpass").innerHTML = s;
+}
+
+function getCrackTime() {
+var inputVal = document.getElementById("passInput").value;
+let re_onlyNum = /^[0-9]+$/;
+let re_onlyLowerCase = /^[a-z]+$/;
+let re_UpperAndLower = /^[A-Za-z]+$/;
+let re_numbersAndLetters = /^[0-9A-Za-z]+$/;
+let re_everything = /^[0-9A-Za-z@!#\$\^%&*()+=\-\[\]\\\';,\.\/\{\}\|\":<>\? ]+$/;
+
+if (re_onlyNum.test(inputVal)) {
+calcCrackTime(10n, BigInt(inputVal.length));
+return;
+}
+else if (re_onlyLowerCase.test(inputVal)) {
+calcCrackTime(26n, BigInt(inputVal.length));
+return;
+}
+else if (re_UpperAndLower.test(inputVal)) {
+calcCrackTime(52n, BigInt(inputVal.length));
+return;
+}
+else if (re_numbersAndLetters.test(inputVal)) {
+calcCrackTime(62n, BigInt(inputVal.length));
+return;
+}
+else if (re_everything.test(inputVal)) {
+calcCrackTime(95n, BigInt(inputVal.length));
+return;
+} else {
+document.getElementById("timeToCrack").innerHTML = "Please enter a valid password.";
+}
+
+
+
+}
+
+function calcCrackTime(search_space, length) {
+var secs = ((search_space**length) / 30000000n);
+var base_msg = "This password could be cracked in ";
+var end_msg = ".";
+if (secs / 31536000000n > 1n) {
+document.getElementById("timeToCrack").innerHTML = base_msg + secs / 31536000000n + " millenia" + end_msg;
+return;
+}
+if (secs / 31536000000n == 1n) {
+document.getElementById("timeToCrack").innerHTML = base_msg + 1n + " millenium" + end_msg;
+return;
+}
+if (secs / 31536000n > 1n) {
+document.getElementById("timeToCrack").innerHTML = base_msg + (secs / 31536000n) + " years" + end_msg;
+return;
+}
+if (secs / 31536000n == 1n) {
+document.getElementById("timeToCrack").innerHTML = base_msg + 1n + " year" + end_msg;
+return;
+}
+if (secs / 604800n > 1n) {
+document.getElementById("timeToCrack").innerHTML = base_msg + (secs / 604800n) + " weeks" + end_msg;
+return;
+}
+if (secs / 604800n == 1n) {
+document.getElementById("timeToCrack").innerHTML = base_msg + 1n + " week" + end_msg;
+return;
+}
+if (secs / 86400n > 1n) {
+document.getElementById("timeToCrack").innerHTML = base_msg + (secs / 86400n) + " days" + end_msg;
+return;
+}
+if (secs / 86400n == 1n) {
+document.getElementById("timeToCrack").innerHTML = base_msg + 1n + " day" + end_msg;
+return;
+}
+if (secs / 3600n > 1n) {
+document.getElementById("timeToCrack").innerHTML = base_msg + (secs / 3600n) + " hours" + end_msg;
+return;
+}
+if (secs / 3600n == 1n) {
+document.getElementById("timeToCrack").innerHTML = base_msg + 1n + " hour" + end_msg;
+return;
+}
+if (secs / 60n > 1n) {
+document.getElementById("timeToCrack").innerHTML = base_msg + (secs / 60n) + " minutes" + end_msg;
+return;
+}
+if (secs / 60n == 1n) {
+document.getElementById("timeToCrack").innerHTML = base_msg + 1n + " minute" + end_msg;
+return;
+}
+if (secs < 1) {
+document.getElementById("timeToCrack").innerHTML = base_msg + " <1 second" + end_msg;
+return;
+}
+if (secs == 1) {
+document.getElementById("timeToCrack").innerHTML = base_msg + " 1 second" + end_msg;
+return;
+}
+document.getElementById("timeToCrack").innerHTML = base_msg + secs + " seconds" + end_msg;
+return;
+}
+</script>
+
+</head>
+<body>
+<div class="topnav">
+  <a class="active" href="mainpage.html">Home</a>
+  <a href="about.html">About</a>
+</div>
+
+
+<h2>SafePass</h2>
+
+
+<p style = "text-align: center; position:relative; top: 12px;">
+How secure is your password?
+</p>
+
+<p>
+This password checker will tell you how long a brute-force cracking method would take to <br>
+guess your password.
+</p>
+
+<p>
+Enter a password below to find out how secure it is!
+<p>
+
+<input type="password" placeholder="Enter a password..." id="passInput">
+<button type="button" onclick="getCrackTime();">Enter</button>
+
+<p id="timeToCrack"></p>
+
+<p>
+This figure is derived from both the size of the password and the variety of characters. <br>
+We are also assuming a computer which can guess 30,000,000 passwords per second (we can reach this on high-end consumer hardware). <br>
+Always use a mixture of lower and upper case letters, and don't forget to include punctuation and special characters!
+</p>
+
+<p style = "position:relative; top: 12px;">
+To improve your password's security...
+</p>
+
+<ul>
+  <li>Hackers often use a list of common passwords. If yours is on one of these lists, it can be cracked instantly.
+  <li>Try not to use repeating characters.</li>
+  <li>Do not store your password in plain text. Instead, use a password manager, which can encrypt multiple passwords behind one master password.</li>
+</ul>
+
+<p style = "position:relative; top: 12px;">
+Use this button to generate a secure 15-character password.
+</p>
+
+
+<button type="button" onclick="randomPassword()">Generate a random password</button>
+
+<p id="randpass"></p>
+
+</body>
+</html> 
